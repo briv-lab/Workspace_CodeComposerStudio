@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<deviceVariant value="MSP430FR6989"/>
+	<deviceFamily value="MSP430"/>
+	<codegenToolVersion value="4.4.5"/>
+	<isElfFormat value="true"/>
+	<linkerCommandFile value="lnk_msp430fr6989.cmd"/>
+	<rts value="libc.a"/>
+	<createSlaveProjects value=""/>
+	<origin value="C:\Users\n.noury\Desktop\SEH\ti\msp430\MSPWare_2_40_00_37\examples\boards\MSP-EXP430FR6989\MSP-EXP430FR6989_Software_Examples\Firmware\Source\BlinkLED_MSP430FR6989\CCS\BlinkLED_MSP430FR6989.projectspec"/>
+	<templateProperties value="id=BlinkLED_MSP430FR6989.projectspec.BlinkLED_MSP430FR6989,"/>
+</projectOptions>
