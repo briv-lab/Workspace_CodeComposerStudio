@@ -156,11 +156,6 @@ int main(void) {
                 clearLCD();              // Clear all LCD segments
                 tempSensorModeInit();    // initialize temperature mode
                 tempSensor();
-            // Dans main.c, fonction PORT1_ISR
-            tempUnit++;
-            if (tempUnit > 2) {   // Utilise "> 2" (ou "== 3")
-                tempUnit = 0;
-            } 
                 break;
         }
     }
@@ -358,8 +353,10 @@ __interrupt void PORT1_ISR(void)
                         }
                         break;
                     case TEMPSENSOR_MODE:
-                        // Toggle temperature unit flag
-                        tempUnit ^= 0x01;
+                        // Cycle through temperature units: C (0) -> F (1) -> V (2) -> C (0)
+                        tempUnit++;
+                        if (tempUnit > 2)
+                            tempUnit = 0;
                         // Update LCD when temp sensor is not running
                         if (!tempSensorRunning)
                             displayTemp();
