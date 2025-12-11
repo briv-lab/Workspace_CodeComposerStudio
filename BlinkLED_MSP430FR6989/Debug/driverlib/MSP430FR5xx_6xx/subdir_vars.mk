@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+SHELL = cmd.exe
+
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../driverlib/MSP430FR5xx_6xx/adc12_b.c \
@@ -33,6 +35,36 @@ C_SRCS += \
 ../driverlib/MSP430FR5xx_6xx/tlv.c \
 ../driverlib/MSP430FR5xx_6xx/wdt_a.c 
 
+C_DEPS += \
+./driverlib/MSP430FR5xx_6xx/adc12_b.d \
+./driverlib/MSP430FR5xx_6xx/aes256.d \
+./driverlib/MSP430FR5xx_6xx/comp_e.d \
+./driverlib/MSP430FR5xx_6xx/crc.d \
+./driverlib/MSP430FR5xx_6xx/crc32.d \
+./driverlib/MSP430FR5xx_6xx/cs.d \
+./driverlib/MSP430FR5xx_6xx/dma.d \
+./driverlib/MSP430FR5xx_6xx/esi.d \
+./driverlib/MSP430FR5xx_6xx/eusci_a_spi.d \
+./driverlib/MSP430FR5xx_6xx/eusci_a_uart.d \
+./driverlib/MSP430FR5xx_6xx/eusci_b_i2c.d \
+./driverlib/MSP430FR5xx_6xx/eusci_b_spi.d \
+./driverlib/MSP430FR5xx_6xx/framctl.d \
+./driverlib/MSP430FR5xx_6xx/gpio.d \
+./driverlib/MSP430FR5xx_6xx/lcd_c.d \
+./driverlib/MSP430FR5xx_6xx/mpu.d \
+./driverlib/MSP430FR5xx_6xx/mpy32.d \
+./driverlib/MSP430FR5xx_6xx/pmm.d \
+./driverlib/MSP430FR5xx_6xx/ram.d \
+./driverlib/MSP430FR5xx_6xx/ref_a.d \
+./driverlib/MSP430FR5xx_6xx/rtc_b.d \
+./driverlib/MSP430FR5xx_6xx/rtc_c.d \
+./driverlib/MSP430FR5xx_6xx/sfr.d \
+./driverlib/MSP430FR5xx_6xx/sysctl.d \
+./driverlib/MSP430FR5xx_6xx/timer_a.d \
+./driverlib/MSP430FR5xx_6xx/timer_b.d \
+./driverlib/MSP430FR5xx_6xx/tlv.d \
+./driverlib/MSP430FR5xx_6xx/wdt_a.d 
+
 OBJS += \
 ./driverlib/MSP430FR5xx_6xx/adc12_b.obj \
 ./driverlib/MSP430FR5xx_6xx/aes256.obj \
@@ -63,66 +95,6 @@ OBJS += \
 ./driverlib/MSP430FR5xx_6xx/tlv.obj \
 ./driverlib/MSP430FR5xx_6xx/wdt_a.obj 
 
-C_DEPS += \
-./driverlib/MSP430FR5xx_6xx/adc12_b.pp \
-./driverlib/MSP430FR5xx_6xx/aes256.pp \
-./driverlib/MSP430FR5xx_6xx/comp_e.pp \
-./driverlib/MSP430FR5xx_6xx/crc.pp \
-./driverlib/MSP430FR5xx_6xx/crc32.pp \
-./driverlib/MSP430FR5xx_6xx/cs.pp \
-./driverlib/MSP430FR5xx_6xx/dma.pp \
-./driverlib/MSP430FR5xx_6xx/esi.pp \
-./driverlib/MSP430FR5xx_6xx/eusci_a_spi.pp \
-./driverlib/MSP430FR5xx_6xx/eusci_a_uart.pp \
-./driverlib/MSP430FR5xx_6xx/eusci_b_i2c.pp \
-./driverlib/MSP430FR5xx_6xx/eusci_b_spi.pp \
-./driverlib/MSP430FR5xx_6xx/framctl.pp \
-./driverlib/MSP430FR5xx_6xx/gpio.pp \
-./driverlib/MSP430FR5xx_6xx/lcd_c.pp \
-./driverlib/MSP430FR5xx_6xx/mpu.pp \
-./driverlib/MSP430FR5xx_6xx/mpy32.pp \
-./driverlib/MSP430FR5xx_6xx/pmm.pp \
-./driverlib/MSP430FR5xx_6xx/ram.pp \
-./driverlib/MSP430FR5xx_6xx/ref_a.pp \
-./driverlib/MSP430FR5xx_6xx/rtc_b.pp \
-./driverlib/MSP430FR5xx_6xx/rtc_c.pp \
-./driverlib/MSP430FR5xx_6xx/sfr.pp \
-./driverlib/MSP430FR5xx_6xx/sysctl.pp \
-./driverlib/MSP430FR5xx_6xx/timer_a.pp \
-./driverlib/MSP430FR5xx_6xx/timer_b.pp \
-./driverlib/MSP430FR5xx_6xx/tlv.pp \
-./driverlib/MSP430FR5xx_6xx/wdt_a.pp 
-
-C_DEPS__QUOTED += \
-"driverlib\MSP430FR5xx_6xx\adc12_b.pp" \
-"driverlib\MSP430FR5xx_6xx\aes256.pp" \
-"driverlib\MSP430FR5xx_6xx\comp_e.pp" \
-"driverlib\MSP430FR5xx_6xx\crc.pp" \
-"driverlib\MSP430FR5xx_6xx\crc32.pp" \
-"driverlib\MSP430FR5xx_6xx\cs.pp" \
-"driverlib\MSP430FR5xx_6xx\dma.pp" \
-"driverlib\MSP430FR5xx_6xx\esi.pp" \
-"driverlib\MSP430FR5xx_6xx\eusci_a_spi.pp" \
-"driverlib\MSP430FR5xx_6xx\eusci_a_uart.pp" \
-"driverlib\MSP430FR5xx_6xx\eusci_b_i2c.pp" \
-"driverlib\MSP430FR5xx_6xx\eusci_b_spi.pp" \
-"driverlib\MSP430FR5xx_6xx\framctl.pp" \
-"driverlib\MSP430FR5xx_6xx\gpio.pp" \
-"driverlib\MSP430FR5xx_6xx\lcd_c.pp" \
-"driverlib\MSP430FR5xx_6xx\mpu.pp" \
-"driverlib\MSP430FR5xx_6xx\mpy32.pp" \
-"driverlib\MSP430FR5xx_6xx\pmm.pp" \
-"driverlib\MSP430FR5xx_6xx\ram.pp" \
-"driverlib\MSP430FR5xx_6xx\ref_a.pp" \
-"driverlib\MSP430FR5xx_6xx\rtc_b.pp" \
-"driverlib\MSP430FR5xx_6xx\rtc_c.pp" \
-"driverlib\MSP430FR5xx_6xx\sfr.pp" \
-"driverlib\MSP430FR5xx_6xx\sysctl.pp" \
-"driverlib\MSP430FR5xx_6xx\timer_a.pp" \
-"driverlib\MSP430FR5xx_6xx\timer_b.pp" \
-"driverlib\MSP430FR5xx_6xx\tlv.pp" \
-"driverlib\MSP430FR5xx_6xx\wdt_a.pp" 
-
 OBJS__QUOTED += \
 "driverlib\MSP430FR5xx_6xx\adc12_b.obj" \
 "driverlib\MSP430FR5xx_6xx\aes256.obj" \
@@ -152,6 +124,36 @@ OBJS__QUOTED += \
 "driverlib\MSP430FR5xx_6xx\timer_b.obj" \
 "driverlib\MSP430FR5xx_6xx\tlv.obj" \
 "driverlib\MSP430FR5xx_6xx\wdt_a.obj" 
+
+C_DEPS__QUOTED += \
+"driverlib\MSP430FR5xx_6xx\adc12_b.d" \
+"driverlib\MSP430FR5xx_6xx\aes256.d" \
+"driverlib\MSP430FR5xx_6xx\comp_e.d" \
+"driverlib\MSP430FR5xx_6xx\crc.d" \
+"driverlib\MSP430FR5xx_6xx\crc32.d" \
+"driverlib\MSP430FR5xx_6xx\cs.d" \
+"driverlib\MSP430FR5xx_6xx\dma.d" \
+"driverlib\MSP430FR5xx_6xx\esi.d" \
+"driverlib\MSP430FR5xx_6xx\eusci_a_spi.d" \
+"driverlib\MSP430FR5xx_6xx\eusci_a_uart.d" \
+"driverlib\MSP430FR5xx_6xx\eusci_b_i2c.d" \
+"driverlib\MSP430FR5xx_6xx\eusci_b_spi.d" \
+"driverlib\MSP430FR5xx_6xx\framctl.d" \
+"driverlib\MSP430FR5xx_6xx\gpio.d" \
+"driverlib\MSP430FR5xx_6xx\lcd_c.d" \
+"driverlib\MSP430FR5xx_6xx\mpu.d" \
+"driverlib\MSP430FR5xx_6xx\mpy32.d" \
+"driverlib\MSP430FR5xx_6xx\pmm.d" \
+"driverlib\MSP430FR5xx_6xx\ram.d" \
+"driverlib\MSP430FR5xx_6xx\ref_a.d" \
+"driverlib\MSP430FR5xx_6xx\rtc_b.d" \
+"driverlib\MSP430FR5xx_6xx\rtc_c.d" \
+"driverlib\MSP430FR5xx_6xx\sfr.d" \
+"driverlib\MSP430FR5xx_6xx\sysctl.d" \
+"driverlib\MSP430FR5xx_6xx\timer_a.d" \
+"driverlib\MSP430FR5xx_6xx\timer_b.d" \
+"driverlib\MSP430FR5xx_6xx\tlv.d" \
+"driverlib\MSP430FR5xx_6xx\wdt_a.d" 
 
 C_SRCS__QUOTED += \
 "../driverlib/MSP430FR5xx_6xx/adc12_b.c" \

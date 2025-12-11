@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccs1210/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS
+CG_TOOL_ROOT := C:/ti/ccs2040/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -97,9 +97,6 @@ endif
 ifneq ($(strip $(S64_DEPS)),)
 -include $(S64_DEPS)
 endif
-ifneq ($(strip $(INO_DEPS)),)
--include $(INO_DEPS)
-endif
 ifneq ($(strip $(CLA_DEPS)),)
 -include $(CLA_DEPS)
 endif
@@ -114,9 +111,6 @@ ifneq ($(strip $(C62_DEPS)),)
 endif
 ifneq ($(strip $(C67_DEPS)),)
 -include $(C67_DEPS)
-endif
-ifneq ($(strip $(PDE_DEPS)),)
--include $(PDE_DEPS)
 endif
 ifneq ($(strip $(K_DEPS)),)
 -include $(K_DEPS)
@@ -154,16 +148,16 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-OutOfBox_MSP430FR6989.out \
+OutOfBox_MSP430FR6989.out 
 
 EXE_OUTPUTS__QUOTED += \
-"OutOfBox_MSP430FR6989.out" \
+"OutOfBox_MSP430FR6989.out" 
 
 BIN_OUTPUTS += \
-OutOfBox_MSP430FR6989.txt \
+OutOfBox_MSP430FR6989.txt 
 
 BIN_OUTPUTS__QUOTED += \
-"OutOfBox_MSP430FR6989.txt" \
+"OutOfBox_MSP430FR6989.txt" 
 
 
 # All Target
@@ -173,14 +167,14 @@ all: OutOfBox_MSP430FR6989.out secondary-outputs
 OutOfBox_MSP430FR6989.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: MSP430 Linker'
-	"C:/ti/ccs1210/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/bin/cl430" -vmspx --abi=eabi --data_model=restricted --use_hw_mpy=F5 --advice:power=all --advice:hw_config=all -g --define=__MSP430FR6989__ --display_error_number --diag_warning=225 --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"OutOfBox_MSP430FR6989.map" --stack_size=160 --heap_size=160 --cinit_hold_wdt=on -i"C:/ti/ccs1210/ccs/ccs_base/msp430/include" -i"C:/ti/ccs1210/ccs/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"C:/ti/ccs1210/ccs/ccs_base/msp430/lib/FR59xx" -i"C:/ti/ccs1210/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/lib" -i"C:/ti/ccs1210/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/include" --reread_libs --priority --warn_sections --diag_wrap=off --display_error_number --xml_link_info="OutOfBox_MSP430FR6989_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "OutOfBox_MSP430FR6989.out" $(ORDERED_OBJS)
+	"C:/ti/ccs2040/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/bin/cl430" -vmspx --abi=eabi --data_model=restricted --use_hw_mpy=F5 --advice:power=all --advice:hw_config=all -g --define=__MSP430FR6989__ --display_error_number --diag_warning=225 --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"OutOfBox_MSP430FR6989.map" --stack_size=160 --heap_size=160 --cinit_hold_wdt=on -i"C:/ti/ccs2040/ccs/ccs_base/msp430/include" -i"C:/ti/ccs2040/ccs/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"C:/ti/ccs2040/ccs/ccs_base/msp430/lib/FR59xx" -i"C:/ti/ccs2040/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/lib" -i"C:/ti/ccs2040/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include" --reread_libs --priority --warn_sections --diag_wrap=off --display_error_number --xml_link_info="OutOfBox_MSP430FR6989_linkInfo.xml" --use_hw_mpy=F5 --rom_model -o "OutOfBox_MSP430FR6989.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 OutOfBox_MSP430FR6989.txt: $(EXE_OUTPUTS)
 	@echo 'Building secondary target: "$@"'
 	@echo 'Invoking: MSP430 Hex Utility'
-	"C:/ti/ccs1210/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/bin/hex430" --memwidth=8 --romwidth=8 --diag_wrap=off --ti_txt -o "OutOfBox_MSP430FR6989.txt" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccs2040/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 --diag_wrap=off --ti_txt -o "OutOfBox_MSP430FR6989.txt" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building secondary target: "$@"'
 	@echo ' '
 

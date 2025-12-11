@@ -10,4 +10,6 @@
 	<createSlaveProjects value=""/>
 	<origin value="C:\Users\n.noury\Desktop\SEH\ti\msp430\MSPWare_2_40_00_37\examples\boards\MSP-EXP430FR6989\MSP-EXP430FR6989_Software_Examples\Firmware\Source\BlinkLED_MSP430FR6989\CCS\BlinkLED_MSP430FR6989.projectspec"/>
 	<templateProperties value="id=BlinkLED_MSP430FR6989.projectspec.BlinkLED_MSP430FR6989,"/>
+	<connection value="common/targetdb/connections/TIMSP430-USB.xml"/>
+	<activeTargetConfiguration value="targetConfigs/MSP430FR6989.ccxml"/>
 </projectOptions>
