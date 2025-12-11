@@ -51,10 +51,7 @@ void timer()
         __bis_SR_register(LPM3_bits | GIE);
         __no_operation();
 
-        if (timerRunning)
-        {
-            displayTimerValue();
-        }
+        displayTimerValue();
     }
 }
 

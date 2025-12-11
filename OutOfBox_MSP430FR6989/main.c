@@ -336,21 +336,18 @@ __interrupt void PORT1_ISR(void)
                 }
                 if (mode == TIMER_MODE)
                 {
-                    // Decrement timer if not running
-                    if (!timerRunning)
+                    if (timerRunning)
                     {
-                        if (timerSeconds > 0)
-                            timerSeconds--;
-                        displayTimerValue();
+                        // Pause timer when running
+                        timerRunning = 0;
+                        RTC_C_holdClock(RTC_C_BASE);
                     }
                     else
                     {
-                        // Start/Pause timer
-                        timerRunning ^= 0x1;
-                        if (timerRunning)
-                            RTC_C_startClock(RTC_C_BASE);
-                        else
-                            RTC_C_holdClock(RTC_C_BASE);
+                        // Decrement timer when not running
+                        if (timerSeconds > 0)
+                            timerSeconds--;
+                        displayTimerValue();
                     }
                 }
 
@@ -407,20 +404,18 @@ __interrupt void PORT1_ISR(void)
                             displayTemp();
                         break;
                     case TIMER_MODE:
-                        // Increment timer if not running
-                        if (!timerRunning)
+                        if (timerRunning)
                         {
-                            timerSeconds++;
-                            if (timerSeconds > 5999)
-                                timerSeconds = 5999;
-                            displayTimerValue();
+                            // Pause timer when running
+                            timerRunning = 0;
+                            RTC_C_holdClock(RTC_C_BASE);
                         }
                         else
                         {
-                            // Reset timer if running
-                            timerSeconds = 60;
-                            timerRunning = 0;
-                            RTC_C_holdClock(RTC_C_BASE);
+                            // Increment timer when not running
+                            timerSeconds++;
+                            if (timerSeconds > 5999)
+                                timerSeconds = 5999;
                             displayTimerValue();
                         }
                         break;
@@ -449,6 +444,13 @@ __interrupt void TIMER0_A0_ISR (void)
     if (!(P1IN & BIT1) && !(P1IN & BIT2))
     {
         holdCount++;
+        // Start timer if in TIMER_MODE and both buttons held for short duration
+        if (mode == TIMER_MODE && !timerRunning && holdCount == 15)
+        {
+            timerRunning = 1;
+            if (timerSeconds > 0)
+                RTC_C_startClock(RTC_C_BASE);
+        }
         if (holdCount == 40)
         {
             // Stop Timer A0
