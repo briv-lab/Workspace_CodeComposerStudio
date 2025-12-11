@@ -60,6 +60,7 @@
 extern volatile unsigned char mode;
 extern const char digit[10][2];
 extern const char alphabetBig[26][2];
+extern const char alphabetSmall[26][2];
 
 void Init_LCD(void);
 void displayScrollText(char*);

@@ -62,7 +62,7 @@ void stopWatch()
 void stopWatchModeInit()
 {
     stopWatchRunning = 0;
-    displayScrollText("STOPWATCH MODE");
+    displayScrollText("mode chronometre");
 
     LCD_C_selectDisplayMemory(LCD_C_BASE, LCD_C_DISPLAYSOURCE_MEMORY);
 

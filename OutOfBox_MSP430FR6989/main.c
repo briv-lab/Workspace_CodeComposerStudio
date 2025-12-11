@@ -108,7 +108,7 @@ int main(void) {
 
     __enable_interrupt();
 
-    displayScrollText("WELCOME TO THE FR6989 LAUNCHPAD");
+    displayScrollText("bienvenue sur la carte de Dora MSP430");
 
     int i = 0x01;
 
@@ -142,7 +142,7 @@ int main(void) {
                 {
                     i=1;
                     clearLCD();
-                    displayScrollText("HOLD S1 AND S2 TO SWITCH MODES");
+                    displayScrollText("maintenir S1 et S2 pour changer de mode");
                 }
                 __bis_SR_register(LPM3_bits | GIE);         // enter LPM3
                 __no_operation();
@@ -156,6 +156,11 @@ int main(void) {
                 clearLCD();              // Clear all LCD segments
                 tempSensorModeInit();    // initialize temperature mode
                 tempSensor();
+            // Dans main.c, fonction PORT1_ISR
+            tempUnit++;
+            if (tempUnit > 2) {   // Utilise "> 2" (ou "== 3")
+                tempUnit = 0;
+            } 
                 break;
         }
     }

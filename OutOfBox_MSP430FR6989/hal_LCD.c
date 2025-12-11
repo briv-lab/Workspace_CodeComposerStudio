@@ -92,6 +92,37 @@ const char alphabetBig[26][2] =
     {0x90, 0x28}   /* "Z" */
 };
 
+// LCD memory map for lowercase letters
+const char alphabetSmall[26][2] =
+{
+    {0x1A, 0x06},  /* "a" */
+    {0x3E, 0x00},  /* "b" */
+    {0x1A, 0x00},  /* "c" */
+    {0x7A, 0x00},  /* "d" */
+    {0xDF, 0x00},  /* "e" */
+    {0x8E, 0x00},  /* "f" */
+    {0xF6, 0x00},  /* "g" */
+    {0x2E, 0x00},  /* "h" */
+    {0x20, 0x00},  /* "i" */
+    {0x70, 0x00},  /* "j" */
+    {0x0E, 0x22},  /* "k" */
+    {0x0C, 0x00},  /* "l" */
+    {0x2B, 0x14},  /* "m" */
+    {0x2A, 0x00},  /* "n" */
+    {0x3A, 0x00},  /* "o" */
+    {0xCE, 0x00},  /* "p" */
+    {0xE6, 0x00},  /* "q" */
+    {0x0A, 0x00},  /* "r" */
+    {0xB6, 0x00},  /* "s" */
+    {0x1E, 0x00},  /* "t" */
+    {0x38, 0x00},  /* "u" */
+    {0x08, 0x02},  /* "v" */
+    {0x28, 0x12},  /* "w" */
+    {0x00, 0xB2},  /* "x" */
+    {0x76, 0x00},  /* "y" */
+    {0x90, 0x30}   /* "z" */
+};
+
 void Init_LCD()
 {
     LCD_C_initParam initParams = {0};
@@ -192,6 +223,13 @@ void showChar(char c, int position)
         LCDMEM[position] = alphabetBig[c-65][0];
         LCDMEM[position+1] = alphabetBig[c-65][1];
     }
+    else if (c >= 'a' && c <= 'z') 
+    {
+        // Display lowercase alphabet (Nouveau bloc !)
+        LCDMEM[position] = alphabetSmall[c-97][0];
+        LCDMEM[position+1] = alphabetSmall[c-97][1];
+    }
+
     else
     {
         // Turn all segments on if character is not a space, digit, or uppercase letter

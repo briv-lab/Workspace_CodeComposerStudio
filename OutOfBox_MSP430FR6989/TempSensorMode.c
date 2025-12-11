@@ -48,6 +48,7 @@
 volatile unsigned char tempUnit = 0;         // Temperature Unit
 volatile int degC;                       // Celcius measurement
 volatile int degF;                       // Fahrenheit measurement
+volatile int volts;
 
 // TimerA UpMode Configuration Parameter
 Timer_A_initUpModeParam initUpParam_A1 =
@@ -85,6 +86,9 @@ void tempSensor()
             signed short temp = (ADC12MEM0 - CALADC_12V_30C);
             degC = ((long)temp * 10 * (85-30) * 10)/((CALADC_12V_85C-CALADC_12V_30C)*10) + 300;
             degF = (degC) * 9 / 5 + 320;
+            
+            // On calcule en volts
+            volts = ((long)ADC12MEM0 * 1200) / 4096;
 
             // Update temperature on LCD
             displayTemp();
@@ -98,7 +102,7 @@ void tempSensorModeInit()
 {
     tempSensorRunning = 1;
 
-    displayScrollText("TEMPSENSOR MODE");
+    displayScrollText("mode thermometre");
 
     RTC_C_holdClock(RTC_C_BASE);                           // Stop stopwatch
     RTC_C_holdCounterPrescale(RTC_C_BASE, RTC_C_PRESCALE_0);
@@ -201,40 +205,55 @@ void displayTemp()
 {
     clearLCD();
 
-    // Pick C or F depending on tempUnit state
-    int deg;
-    if (tempUnit == 0)
+    if (tempUnit == 2) 
     {
-        showChar('C',pos6);
-        deg = degC;
+        // --- MODE VOLTS ---
+        showChar('V', pos6);
+        
+        int v = volts; // On récupère la valeur en mV (ex: 750)
+
+        // Affichage format X.XXX (ex: 0.750 V ou 1.200 V)
+        // On force l'affichage de tous les chiffres, même les 0
+        showChar((v/1000)%10 + '0', pos2); // Unité (V)
+        showChar((v/100)%10 + '0', pos3);  // Centaine (mV)
+        showChar((v/10)%10 + '0', pos4);   // Dizaine (mV)
+        showChar((v/1)%10 + '0', pos5);    // Unité (mV)
+
+        // Allume le point après le premier chiffre (ex: 0.xxx)
+        LCDMEM[pos2+1] |= 0x01; 
     }
-    else
+    else 
     {
-        showChar('F',pos6);
-        deg = degF;
+        // --- MODE TEMPERATURE (Code d'origine ou presque) ---
+        int deg;
+        if (tempUnit == 0)
+        {
+            showChar('C', pos6); // Si tu as mis les minuscules : 'c'
+            deg = degC;
+        }
+        else
+        {
+            showChar('F', pos6); // Si tu as mis les minuscules : 'f'
+            deg = degF;
+        }
+
+        // Gestion des négatifs
+        if (deg < 0)
+        {
+            deg *= -1;
+            LCDMEM[pos1+1] |= 0x04; // Signe moins
+        }
+
+        // Affichage XX.X
+        if (deg>=1000) showChar((deg/1000)%10 + '0', pos2);
+        if (deg>=100)  showChar((deg/100)%10 + '0', pos3);
+        if (deg>=10)   showChar((deg/10)%10 + '0', pos4);
+        if (deg>=1)    showChar((deg/1)%10 + '0', pos5);
+
+        // Point décimal standard (XX.X)
+        LCDMEM[pos4+1] |= 0x01;
+        
+        // Symbole Degré
+        LCDMEM[pos5+1] |= 0x04;
     }
-
-    // Handle negative values
-    if (deg < 0)
-    {
-        deg *= -1;
-        // Negative sign
-        LCDMEM[pos1+1] |= 0x04;
-    }
-
-    // Handles displaying up to 999.9 degrees
-    if (deg>=1000)
-        showChar((deg/1000)%10 + '0',pos2);
-    if (deg>=100)
-        showChar((deg/100)%10 + '0',pos3);
-    if (deg>=10)
-        showChar((deg/10)%10 + '0',pos4);
-    if (deg>=1)
-        showChar((deg/1)%10 + '0',pos5);
-
-    // Decimal point
-    LCDMEM[pos4+1] |= 0x01;
-
-    // Degree symbol
-    LCDMEM[pos5+1] |= 0x04;
 }

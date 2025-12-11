@@ -1,16 +1,23 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "BlinkLED_MSP430FR6989",
-      "type": "ccs-debug",
-      "request": "launch",
-      "projectInfo": {
-        "name": "BlinkLED_MSP430FR6989",
-        "resourceId": "/BlinkLED_MSP430FR6989"
-      }
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "BlinkLED_MSP430FR6989",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "BlinkLED_MSP430FR6989",
+                "resourceId": "/BlinkLED_MSP430FR6989"
+            }
+        },
+        {
+            "name": "OutOfBox_MSP430FR6989",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "OutOfBox_MSP430FR6989",
+                "resourceId": "/OutOfBox_MSP430FR6989"
+            }
+        }
+    ]
 }
