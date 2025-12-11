@@ -53,6 +53,7 @@
 #include <driverlib.h>
 #include "StopWatchMode.h"
 #include "TempSensorMode.h"
+#include "TimerMode.h"
 #include "hal_LCD.h"
 
 #define STARTUP_MODE         0
@@ -156,6 +157,11 @@ int main(void) {
                 clearLCD();              // Clear all LCD segments
                 tempSensorModeInit();    // initialize temperature mode
                 tempSensor();
+                break;
+            case TIMER_MODE:             // Timer mode
+                clearLCD();              // Clear all LCD segments
+                timerModeInit();         // initialize timer mode
+                timer();
                 break;
         }
     }
@@ -263,6 +269,26 @@ void RTC_ISR(void)
         __bic_SR_register_on_exit(LPM3_bits);
         break;     //RT0PSIFG
     case RTCIV_RT1PSIFG:
+        // Timer mode: decrement every second (4 interrupts = 1 second at 250ms)
+        if (mode == TIMER_MODE && timerRunning)
+        {
+            static unsigned char timerCounter = 0;
+            timerCounter++;
+            if (timerCounter >= 4)
+            {
+                timerCounter = 0;
+                if (timerSeconds > 0)
+                {
+                    timerSeconds--;
+                }
+                else
+                {
+                    // Timer reached 0, stop it
+                    timerRunning = 0;
+                    RTC_C_holdClock(RTC_C_BASE);
+                }
+            }
+        }
         __bic_SR_register_on_exit(LPM3_bits);
         break;     //RT1PSIFG
 
@@ -307,6 +333,25 @@ __interrupt void PORT1_ISR(void)
                     else
                         // Disable ADC conversion
                         ADC12_B_disableConversions(ADC12_B_BASE,true);
+                }
+                if (mode == TIMER_MODE)
+                {
+                    // Decrement timer if not running
+                    if (!timerRunning)
+                    {
+                        if (timerSeconds > 0)
+                            timerSeconds--;
+                        displayTimerValue();
+                    }
+                    else
+                    {
+                        // Start/Pause timer
+                        timerRunning ^= 0x1;
+                        if (timerRunning)
+                            RTC_C_startClock(RTC_C_BASE);
+                        else
+                            RTC_C_holdClock(RTC_C_BASE);
+                    }
                 }
 
                 // Start debounce timer
@@ -361,6 +406,24 @@ __interrupt void PORT1_ISR(void)
                         if (!tempSensorRunning)
                             displayTemp();
                         break;
+                    case TIMER_MODE:
+                        // Increment timer if not running
+                        if (!timerRunning)
+                        {
+                            timerSeconds++;
+                            if (timerSeconds > 5999)
+                                timerSeconds = 5999;
+                            displayTimerValue();
+                        }
+                        else
+                        {
+                            // Reset timer if running
+                            timerSeconds = 60;
+                            timerRunning = 0;
+                            RTC_C_holdClock(RTC_C_BASE);
+                            displayTimerValue();
+                        }
+                        break;
                 }
 
                 // Start debounce timer
@@ -403,7 +466,7 @@ __interrupt void TIMER0_A0_ISR (void)
             }
             else if (mode == TEMPSENSOR_MODE)
             {
-                mode = STOPWATCH_MODE;
+                mode = TIMER_MODE;
                 tempSensorRunning = 0;
                 // Disable ADC12, TimerA1, Internal Ref and Temp used by TempSensor Mode
                 ADC12_B_disable(ADC12_B_BASE);
@@ -411,7 +474,42 @@ __interrupt void TIMER0_A0_ISR (void)
 
                 Timer_A_stop(TIMER_A1_BASE);
             }
+            else if (mode == TIMER_MODE)
+            {
+                mode = STOPWATCH_MODE;
+                timerRunning = 0;
+                // Hold RTC
+                RTC_C_holdClock(RTC_C_BASE);
+            }
             __bic_SR_register_on_exit(LPM3_bits);                // exit LPM3
+        }
+    }
+    
+    // Handle fast increment/decrement for timer mode when holding buttons
+    if (mode == TIMER_MODE && !timerRunning)
+    {
+        // S1 held (decrement)
+        if (!(P1IN & BIT1) && (P1IN & BIT2))
+        {
+            if (holdCount > 10 && (holdCount % 2 == 0))
+            {
+                if (timerSeconds > 0)
+                {
+                    timerSeconds--;
+                    displayTimerValue();
+                }
+            }
+        }
+        // S2 held (increment)
+        if ((P1IN & BIT1) && !(P1IN & BIT2))
+        {
+            if (holdCount > 10 && (holdCount % 2 == 0))
+            {
+                timerSeconds++;
+                if (timerSeconds > 5999)
+                    timerSeconds = 5999;
+                displayTimerValue();
+            }
         }
     }
 
@@ -436,7 +534,7 @@ __interrupt void TIMER0_A0_ISR (void)
         Timer_A_stop(TIMER_A0_BASE);
     }
 
-    if (mode == STOPWATCH_MODE || mode == TEMPSENSOR_MODE)
+    if (mode == STOPWATCH_MODE || mode == TEMPSENSOR_MODE || mode == TIMER_MODE)
         __bic_SR_register_on_exit(LPM3_bits);            // exit LPM3
 }
 
