@@ -49,6 +49,7 @@ extern Timer_A_initUpModeParam initUpParam_A0;
 extern volatile unsigned char timerRunning;
 extern volatile int timerSeconds;
 extern volatile unsigned int holdCount;
+extern volatile unsigned char timerRtcCounter;
 
 void timer(void);
 void timerModeInit(void);

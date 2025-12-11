@@ -36,7 +36,7 @@
  * Out of Box Demo for the MSP-EXP430FR6989
  * Main loop, initialization, and interrupt service routines
  *
- * This demo provides 2 application modes: Stopwatch Mode and Temperature Mode
+ * This demo provides 3 application modes: Stopwatch Mode, Temperature Mode, and Timer Mode
  *
  * The stopwatch mode provides a simple stopwatch application that supports split
  * time, where the display freezes while the stopwatch continues running in the
@@ -44,6 +44,9 @@
  *
  * The temperature mode provides a simple thermometer application using the
  * on-chip temperature sensor. Display toggles between C/F.
+ *
+ * The timer mode provides a countdown timer with adjustable duration using
+ * the S1 and S2 buttons.
  *
  * February 2015
  * E. Chen
@@ -57,6 +60,7 @@
 #include "hal_LCD.h"
 
 #define STARTUP_MODE         0
+#define MAX_TIMER_SECONDS    5999
 
 volatile unsigned char mode = STARTUP_MODE;
 volatile unsigned char stopWatchRunning = 0;
@@ -66,6 +70,7 @@ volatile unsigned char S2buttonDebounce = 0;
 volatile unsigned int holdCount = 0;
 volatile unsigned int counter = 0;
 volatile int centisecond = 0;
+volatile unsigned char timerRtcCounter = 0;
 Calendar currentTime;
 
 // TimerA0 UpMode Configuration Parameter
@@ -272,11 +277,10 @@ void RTC_ISR(void)
         // Timer mode: decrement every second (4 interrupts = 1 second at 250ms)
         if (mode == TIMER_MODE && timerRunning)
         {
-            static unsigned char timerCounter = 0;
-            timerCounter++;
-            if (timerCounter >= 4)
+            timerRtcCounter++;
+            if (timerRtcCounter >= 4)
             {
-                timerCounter = 0;
+                timerRtcCounter = 0;
                 if (timerSeconds > 0)
                 {
                     timerSeconds--;
@@ -414,8 +418,8 @@ __interrupt void PORT1_ISR(void)
                         {
                             // Increment timer when not running
                             timerSeconds++;
-                            if (timerSeconds > 5999)
-                                timerSeconds = 5999;
+                            if (timerSeconds > MAX_TIMER_SECONDS)
+                                timerSeconds = MAX_TIMER_SECONDS;
                             displayTimerValue();
                         }
                         break;
@@ -448,6 +452,7 @@ __interrupt void TIMER0_A0_ISR (void)
         if (mode == TIMER_MODE && !timerRunning && holdCount == 15)
         {
             timerRunning = 1;
+            timerRtcCounter = 0;
             if (timerSeconds > 0)
                 RTC_C_startClock(RTC_C_BASE);
         }
@@ -508,8 +513,8 @@ __interrupt void TIMER0_A0_ISR (void)
             if (holdCount > 10 && (holdCount % 2 == 0))
             {
                 timerSeconds++;
-                if (timerSeconds > 5999)
-                    timerSeconds = 5999;
+                if (timerSeconds > MAX_TIMER_SECONDS)
+                    timerSeconds = MAX_TIMER_SECONDS;
                 displayTimerValue();
             }
         }

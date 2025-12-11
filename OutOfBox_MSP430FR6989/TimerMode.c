@@ -59,6 +59,7 @@ void timerModeInit()
 {
     timerRunning = 0;
     timerSeconds = 60;
+    timerRtcCounter = 0;
     
     displayScrollText("mode minuteur");
 
