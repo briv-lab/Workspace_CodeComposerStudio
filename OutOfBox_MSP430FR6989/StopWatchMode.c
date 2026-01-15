@@ -128,20 +128,23 @@ void displayTime()
     
     // In decrement mode, use manual counters; in increment mode, use RTC calendar
     int displayMinutes, displaySeconds;
-    int displayCentiseconds = (centisecond/327) % 100;
+    int rawCentiseconds = (centisecond/327) % 100;
+    int displayCentiseconds;
     
     if (stopWatchCountDown)
     {
         // Decrement mode: use manual counters
         displayMinutes = stopWatchMinutes;
         displaySeconds = stopWatchSeconds;
-        // Centiseconds count down from 99 to 0 (displayed as decreasing)
-        displayCentiseconds = 99 - displayCentiseconds;
-        if (displayCentiseconds < 0) displayCentiseconds = 0;
         // If time is zero, keep centiseconds at 0
         if (stopWatchMinutes == 0 && stopWatchSeconds == 0)
         {
             displayCentiseconds = 0;
+        }
+        else
+        {
+            // Centiseconds count down from 99 to 0 (displayed as decreasing)
+            displayCentiseconds = 99 - rawCentiseconds;
         }
     }
     else
@@ -149,7 +152,7 @@ void displayTime()
         // Increment mode: use RTC calendar values
         displayMinutes = currentTime.Minutes;
         displaySeconds = currentTime.Seconds;
-        displayCentiseconds = (centisecond/327) % 100;
+        displayCentiseconds = rawCentiseconds;
     }
     
     // Display Minute, Second, Centiseconds if below 1 hour mark.
@@ -177,7 +180,7 @@ void displayTime()
     }
 
     // Blink Stopwatch symbol
-    int centiDisplay = stopWatchCountDown ? displayCentiseconds : (centisecond/327);
+    int centiDisplay = stopWatchCountDown ? displayCentiseconds : rawCentiseconds;
     if (centiDisplay == 0)
     {
         LCDM3 |= 0x08;

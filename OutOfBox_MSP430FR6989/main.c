@@ -65,7 +65,6 @@
 volatile unsigned char mode = STARTUP_MODE;
 volatile unsigned char stopWatchRunning = 0;
 volatile unsigned char stopWatchCountDown = 0;  // 0 = increment mode, 1 = decrement mode
-volatile unsigned char stopWatchRtcCounter = 0; // Counter for RTC interrupts in stopwatch mode
 volatile int stopWatchSeconds = 0;              // Manual seconds counter for decrement mode
 volatile int stopWatchMinutes = 0;              // Manual minutes counter for decrement mode
 volatile unsigned char tempSensorRunning = 0;
