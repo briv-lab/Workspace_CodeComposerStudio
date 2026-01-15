@@ -299,10 +299,7 @@ void RTC_ISR(void)
             if (timerRtcCounter >= 4)
             {
                 timerRtcCounter = 0;
-                if (timerSeconds > 0)
-                {
-                    timerSeconds--;
-                }
+                timerSeconds--;
             }
         }
         __bic_SR_register_on_exit(LPM3_bits);
@@ -369,10 +366,7 @@ __interrupt void PORT1_ISR(void)
                     else
                     {
                         // Decrement timer when not running
-                        if (timerSeconds > 0)
-                        {
-                            timerSeconds--;
-                        }
+                        timerSeconds--;
                         displayTimerValue();
                     }
                 }
@@ -510,10 +504,7 @@ __interrupt void TIMER0_A0_ISR (void)
         {
             if (holdCount > 10 && (holdCount % 2 == 0))
             {
-                if (timerSeconds > 0)
-                {
-                    timerSeconds--;
-                }
+                timerSeconds--;
                 displayTimerValue();
             }
         }
