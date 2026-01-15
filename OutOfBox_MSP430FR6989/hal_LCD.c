@@ -232,8 +232,8 @@ void showChar(char c, int position)
     else if (c == '-')
     {
         // Display minus sign (segment g - middle horizontal bar)
-        LCDMEM[position] = 0x40;
-        LCDMEM[position+1] = 0x00;
+        LCDMEM[position] = 0x03;
+        LCDMEM[position+1] = 0x20;
     }
     else
     {
