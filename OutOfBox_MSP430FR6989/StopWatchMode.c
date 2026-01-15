@@ -143,7 +143,8 @@ void displayTime()
         }
         else
         {
-            // Centiseconds count down from 99 to 0 (displayed as decreasing)
+            // Centiseconds count down: as RTC centiseconds increase 0->99,
+            // display decreases 99->0, synchronized with second decrement
             displayCentiseconds = 99 - rawCentiseconds;
         }
     }
@@ -156,6 +157,7 @@ void displayTime()
     }
     
     // Display Minute, Second, Centiseconds if below 1 hour mark.
+    // In decrement mode, always use MM:SS.cc format since we track from captured time
     if ((int)(currentTime.Hours) == 0 || stopWatchCountDown)
     {
         showChar(displayCentiseconds % 10 + '0',pos6);

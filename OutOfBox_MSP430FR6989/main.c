@@ -341,6 +341,8 @@ __interrupt void PORT1_ISR(void)
                     if (stopWatchRunning)
                     {
                         // Switch to increment mode when stopwatch is running
+                        // Note: Pause functionality replaced with mode switching per requirements
+                        // Hold both S1+S2 buttons to change application modes
                         stopWatchCountDown = 0;
                     }
                     else
@@ -394,6 +396,7 @@ __interrupt void PORT1_ISR(void)
                 {
                     case STOPWATCH_MODE:
                         // Reset stopwatch if stopped; Switch to decrement mode if running
+                        // Note: Split time functionality replaced with decrement mode per requirements
                         if (!(stopWatchRunning))
                         {
                             if (LCDCMEMCTL & LCDDISP)
@@ -405,6 +408,7 @@ __interrupt void PORT1_ISR(void)
                         {
                             // Switch to decrement mode when stopwatch is running
                             // Capture current time for decrement countdown
+                            // Time stays at zero when reaching 0:00.00
                             currentTime = RTC_C_getCalendarTime(RTC_C_BASE);
                             stopWatchMinutes = currentTime.Minutes;
                             stopWatchSeconds = currentTime.Seconds;
