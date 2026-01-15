@@ -87,15 +87,16 @@ void timerModeInit()
 
 void displayTimerValue()
 {
-    int minutes = timerSeconds / 60;
-    int seconds = timerSeconds % 60;
+    int absSeconds = (timerSeconds < 0) ? -timerSeconds : timerSeconds;
+    int minutes = absSeconds / 60;
+    int seconds = absSeconds % 60;
 
     showChar((seconds % 10) + '0', pos6);
     showChar((seconds / 10) + '0', pos5);
     showChar((minutes % 10) + '0', pos4);
     showChar((minutes / 10) + '0', pos3);
-    showChar('0', pos2);
-    showChar('0', pos1);
+    showChar(' ', pos2);
+    showChar((timerSeconds < 0) ? '-' : ' ', pos1);
 
     LCDM7 |= 0x04;
     LCDBM7 |= 0x04;
