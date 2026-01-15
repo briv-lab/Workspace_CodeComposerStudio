@@ -229,7 +229,12 @@ void showChar(char c, int position)
         LCDMEM[position] = alphabetSmall[c-97][0];
         LCDMEM[position+1] = alphabetSmall[c-97][1];
     }
-
+    else if (c == '-')
+    {
+        // Display minus sign (segment g - middle horizontal bar)
+        LCDMEM[position] = 0x03;
+        LCDMEM[position+1] = 0x28;
+    }
     else
     {
         // Turn all segments on if character is not a space, digit, or uppercase letter
