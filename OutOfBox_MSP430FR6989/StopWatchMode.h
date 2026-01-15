@@ -50,6 +50,9 @@ extern volatile unsigned char S1buttonDebounce;
 extern volatile unsigned char S2buttonDebounce;
 extern Timer_A_initUpModeParam initUpParam_A0;
 extern volatile unsigned char stopWatchRunning;
+extern volatile unsigned char stopWatchCountDown;  // 0 = increment mode, 1 = decrement mode
+extern volatile int stopWatchSeconds;              // Manual seconds counter for decrement mode
+extern volatile int stopWatchMinutes;              // Manual minutes counter for decrement mode
 extern Calendar currentTime;
 extern volatile unsigned int counter;
 extern volatile int centisecond;

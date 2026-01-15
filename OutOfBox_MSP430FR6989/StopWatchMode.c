@@ -62,6 +62,9 @@ void stopWatch()
 void stopWatchModeInit()
 {
     stopWatchRunning = 0;
+    stopWatchCountDown = 0;  // Default to increment mode
+    stopWatchSeconds = 0;
+    stopWatchMinutes = 0;
     displayScrollText("mode chronometre");
 
     LCD_C_selectDisplayMemory(LCD_C_BASE, LCD_C_DISPLAYSOURCE_MEMORY);
@@ -104,6 +107,11 @@ void resetStopWatch()
     currentTime.Month = 0x04;
     currentTime.Year = 0x2015;
     centisecond = 0;
+    
+    // Reset manual counters for decrement mode
+    stopWatchSeconds = 0;
+    stopWatchMinutes = 0;
+    stopWatchCountDown = 0;
 
     RTC_C_initCounter(RTC_C_BASE, RTC_C_CLOCKSELECT_32KHZ_OSC, RTC_C_COUNTERSIZE_16BIT);
     RTC_C_initCalendar(RTC_C_BASE,
@@ -117,17 +125,49 @@ void resetStopWatch()
 void displayTime()
 {
     currentTime = RTC_C_getCalendarTime(RTC_C_BASE);
-    // Display Minute, Second, Centiseconds if below 1 hour mark.
-    if ((int)(currentTime.Hours) == 0)
+    
+    // In decrement mode, use manual counters; in increment mode, use RTC calendar
+    int displayMinutes, displaySeconds;
+    int rawCentiseconds = (centisecond/327) % 100;
+    int displayCentiseconds;
+    
+    if (stopWatchCountDown)
     {
-        showChar((centisecond/327) % 10 + '0',pos6);
-        showChar((centisecond/327) / 10 + '0',pos5);
-        showChar((currentTime.Seconds) % 10 + '0',pos4);
-        showChar((currentTime.Seconds) / 10 + '0',pos3);
-        showChar((currentTime.Minutes) % 10 + '0',pos2);
-        showChar((currentTime.Minutes) / 10 + '0',pos1);
+        // Decrement mode: use manual counters
+        displayMinutes = stopWatchMinutes;
+        displaySeconds = stopWatchSeconds;
+        // If time is zero, keep centiseconds at 0
+        if (stopWatchMinutes == 0 && stopWatchSeconds == 0)
+        {
+            displayCentiseconds = 0;
+        }
+        else
+        {
+            // Centiseconds count down: as RTC centiseconds increase 0->99,
+            // display decreases 99->0, synchronized with second decrement
+            displayCentiseconds = 99 - rawCentiseconds;
+        }
     }
-    // Otherwise, display Hour, Minute, Second
+    else
+    {
+        // Increment mode: use RTC calendar values
+        displayMinutes = currentTime.Minutes;
+        displaySeconds = currentTime.Seconds;
+        displayCentiseconds = rawCentiseconds;
+    }
+    
+    // Display Minute, Second, Centiseconds if below 1 hour mark.
+    // In decrement mode, always use MM:SS.cc format since we track from captured time
+    if ((int)(currentTime.Hours) == 0 || stopWatchCountDown)
+    {
+        showChar(displayCentiseconds % 10 + '0',pos6);
+        showChar(displayCentiseconds / 10 + '0',pos5);
+        showChar(displaySeconds % 10 + '0',pos4);
+        showChar(displaySeconds / 10 + '0',pos3);
+        showChar(displayMinutes % 10 + '0',pos2);
+        showChar(displayMinutes / 10 + '0',pos1);
+    }
+    // Otherwise, display Hour, Minute, Second (only for increment mode)
     else
     {
         // Stop counter for centiseconds
@@ -142,12 +182,13 @@ void displayTime()
     }
 
     // Blink Stopwatch symbol
-    if (centisecond/327 == 0)
+    int centiDisplay = stopWatchCountDown ? displayCentiseconds : rawCentiseconds;
+    if (centiDisplay == 0)
     {
         LCDM3 |= 0x08;
         LCDBM3 |= 0x08;
     }
-    if (centisecond/327 == 50)
+    if (centiDisplay == 50)
     {
         LCDM3 &= ~0x08;
         LCDBM3 &= ~0x08;

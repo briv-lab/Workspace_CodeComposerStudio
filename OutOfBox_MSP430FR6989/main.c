@@ -64,6 +64,9 @@
 
 volatile unsigned char mode = STARTUP_MODE;
 volatile unsigned char stopWatchRunning = 0;
+volatile unsigned char stopWatchCountDown = 0;  // 0 = increment mode, 1 = decrement mode
+volatile int stopWatchSeconds = 0;              // Manual seconds counter for decrement mode
+volatile int stopWatchMinutes = 0;              // Manual minutes counter for decrement mode
 volatile unsigned char tempSensorRunning = 0;
 volatile unsigned char S1buttonDebounce = 0;
 volatile unsigned char S2buttonDebounce = 0;
@@ -260,6 +263,21 @@ void RTC_ISR(void)
     case RTCIV_RTCRDYIFG:             //RTCRDYIFG
         counter = RTCPS;
         centisecond = 0;
+        // Handle decrement mode for stopwatch
+        if (mode == STOPWATCH_MODE && stopWatchRunning && stopWatchCountDown)
+        {
+            // Decrement seconds
+            if (stopWatchSeconds > 0)
+            {
+                stopWatchSeconds--;
+            }
+            else if (stopWatchMinutes > 0)
+            {
+                stopWatchMinutes--;
+                stopWatchSeconds = 59;
+            }
+            // If both are 0, stay at 0 (don't go negative)
+        }
         __bic_SR_register_on_exit(LPM3_bits);
         break;
     case RTCIV_RTCTEVIFG:             //RTCEVIFG
@@ -320,12 +338,20 @@ __interrupt void PORT1_ISR(void)
                 holdCount = 0;
                 if (mode == STOPWATCH_MODE)
                 {
-                    // Start/Pause stopwatch
-                    stopWatchRunning ^= 0x1;
                     if (stopWatchRunning)
-                        RTC_C_startClock(RTC_C_BASE);
+                    {
+                        // Switch to increment mode when stopwatch is running
+                        // Note: Pause functionality replaced with mode switching per requirements
+                        // Hold both S1+S2 buttons to change application modes
+                        stopWatchCountDown = 0;
+                    }
                     else
-                        RTC_C_holdClock(RTC_C_BASE);
+                    {
+                        // Start stopwatch when not running
+                        stopWatchRunning = 1;
+                        stopWatchCountDown = 0;  // Default to increment mode
+                        RTC_C_startClock(RTC_C_BASE);
+                    }
                 }
                 if (mode == TEMPSENSOR_MODE)
                 {
@@ -369,7 +395,8 @@ __interrupt void PORT1_ISR(void)
                 switch (mode)
                 {
                     case STOPWATCH_MODE:
-                        // Reset stopwatch if stopped; Split if running
+                        // Reset stopwatch if stopped; Switch to decrement mode if running
+                        // Note: Split time functionality replaced with decrement mode per requirements
                         if (!(stopWatchRunning))
                         {
                             if (LCDCMEMCTL & LCDDISP)
@@ -379,23 +406,13 @@ __interrupt void PORT1_ISR(void)
                         }
                         else
                         {
-                            // Use LCD Blink memory to pause/resume stopwatch at split time
-                            LCDBMEM[pos1] = LCDMEM[pos1];
-                            LCDBMEM[pos1+1] = LCDMEM[pos1+1];
-                            LCDBMEM[pos2] = LCDMEM[pos2];
-                            LCDBMEM[pos2+1] = LCDMEM[pos2+1];
-                            LCDBMEM[pos3] = LCDMEM[pos3];
-                            LCDBMEM[pos3+1] = LCDMEM[pos3+1];
-                            LCDBMEM[pos4] = LCDMEM[pos4];
-                            LCDBMEM[pos4+1] = LCDMEM[pos4+1];
-                            LCDBMEM[pos5] = LCDMEM[pos5];
-                            LCDBMEM[pos5+1] = LCDMEM[pos5+1];
-                            LCDBMEM[pos6] = LCDMEM[pos6];
-                            LCDBMEM[pos6+1] = LCDMEM[pos6+1];
-                            LCDBM3 = LCDM3;
-
-                            // Toggle between LCD Normal/Blink memory
-                            LCDCMEMCTL ^= LCDDISP;
+                            // Switch to decrement mode when stopwatch is running
+                            // Capture current time for decrement countdown
+                            // Time stays at zero when reaching 0:00.00
+                            currentTime = RTC_C_getCalendarTime(RTC_C_BASE);
+                            stopWatchMinutes = currentTime.Minutes;
+                            stopWatchSeconds = currentTime.Seconds;
+                            stopWatchCountDown = 1;
                         }
                         break;
                     case TEMPSENSOR_MODE:
